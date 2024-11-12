@@ -38,3 +38,52 @@ h1 {
   margin-top: 20px;
   text-align: center;
 }
+
+.game-result {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #6c9a4f; /* Verde para indicar éxito */
+  text-align: center;
+}
+
+.game-result.draw {
+  color: #ffc107; /* Amarillo para empate */
+}
+
+.game-result.error {
+  color: #dc3545; /* Rojo para errores */
+}
+
+.color-modal {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.button-modal {
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  background-color: #7ea650;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.text-modal {
+  color: white;
+  font-size: 20px;
+  text-align: center;
+}
