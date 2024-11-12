@@ -97,15 +97,56 @@ const Table = () => {
 
   const resetGame = () => {
     if (socket) {
-      socket.send(JSON.stringify({ command: 'restart' }));
+      // Cerrar la conexión del WebSocket
+      socket.close();
     }
-
+  
+    // Crear un nuevo juego y restablecer los estados
     const newGame = new Chess();
     setGame(newGame);
     setFen(newGame.fen());
     setHistory([]);
     setGameResult(null);
+    setUserColor(null);
     setShowColorModal(true);
+  
+    // Crear una nueva conexión WebSocket
+    const newSocket = new WebSocket('ws://127.0.0.1:8000/ws/game-id');
+    setSocket(newSocket);
+  
+    newSocket.onopen = () => {
+      console.log('Nueva conexión establecida con el servidor');
+    };
+  
+    newSocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+  
+      if (data.error) {
+        console.error('Error del servidor:', data.error);
+      } else {
+        if (data.fen) {
+          setFen(data.fen);
+          setHistory(newGame.history());
+        }
+  
+        if (data.ai_move) {
+          newGame.move(data.ai_move);
+          setFen(newGame.fen());
+        }
+  
+        if (data.is_game_over) {
+          if (data.result === 'checkmate') {
+            setGameResult('¡Jaque mate!');
+          } else if (data.result === 'draw') {
+            setGameResult('¡Empate!');
+          }
+        }
+      }
+    };
+  
+    newSocket.onclose = () => {
+      console.log('Conexión cerrada con el servidor');
+    };
   };
 
   return (
